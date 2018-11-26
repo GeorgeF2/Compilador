@@ -7,6 +7,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.image.Image;
@@ -20,6 +22,7 @@ import java.util.*;
 public class Compilador extends Application{
 
 TextArea inputArea = new TextArea();
+TextArea runTerminal = new TextArea();
 
   @Override
   public void start(Stage stage){
@@ -60,6 +63,7 @@ TextArea inputArea = new TextArea();
       }
     });
 
+
     smFile.getItems().addAll( miOpen, miSave);
     smEdit.getItems().addAll(miUndo, miRedo, miCut, miCopy, miPaste, miClear);
     smWindow.getItems().addAll(miMinimize, miClose);
@@ -86,15 +90,16 @@ TextArea inputArea = new TextArea();
     tree.setPrefWidth(150);
 
     Button submit = new Button("Compile");
+    submit.addEventHandler(MouseEvent.MOUSE_CLICKED,
+        (event) -> runTerminal.setText(inputArea.getText()));
     HBox buttons = new HBox();
     buttons.setPadding(new Insets(5, 5, 5, 5));
     buttons.setAlignment(Pos.CENTER_RIGHT);
     buttons.getChildren().addAll(submit);
 
     VBox bottom = new VBox();
-    TextArea runTerminal = new TextArea();
     runTerminal.setEditable(false);
-    runTerminal.setStyle("-fx-control-inner-background: black; -fx-font-family: Consolas; -fx-text-fill: white;");
+    runTerminal.setStyle("-fx-control-inner-background: black; -fx-font-family: Courier; -fx-text-fill: white;");
     bottom.setPadding(new Insets(5, 5, 5, 5));
     bottom.getChildren().addAll(runTerminal, buttons);
 
