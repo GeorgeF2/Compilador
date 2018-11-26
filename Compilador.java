@@ -12,6 +12,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.image.Image;
+import javafx.scene.shape.*;
 import javafx.scene.image.ImageView;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +24,9 @@ public class Compilador extends Application{
 
 TextArea inputArea = new TextArea();
 TextArea runTerminal = new TextArea();
+TreeView<String> tree = new TreeView<String>();
+BorderPane bp = new BorderPane();
+
 
   @Override
   public void start(Stage stage){
@@ -61,6 +65,15 @@ TextArea runTerminal = new TextArea();
       } catch (FileNotFoundException e1) {
         e1.printStackTrace();
       }
+
+      TreeItem<String> rootItem = new TreeItem<String> (file.getParentFile().getName(), new ImageView(new Image("folder.jpeg")));
+      rootItem.setExpanded(true);
+      for (int i = 1; i < 6; i++) {
+          TreeItem<String> item = new TreeItem<String> ("File" + i);
+          rootItem.getChildren().add(item);
+      }
+      tree = new TreeView<String> (rootItem);
+      bp.setLeft(tree);
     });
 
 
@@ -71,23 +84,23 @@ TextArea runTerminal = new TextArea();
     mBar.getMenus().addAll(smFile, smEdit, smWindow, smHelp);
     //VBox alls = new VBox(mBar);
 
-    BorderPane bp = new BorderPane();
+
 
     inputArea.setStyle("-fx-control-inner-background: darkgray; -fx-font-family: Menlo; -fx-text-fill: white;");
     inputArea.setPadding(new Insets(5, 5, 5, 5));
 
-    final Node rootIcon = new ImageView(
-        new Image("folder.jpeg")
-    );
+    // final Node rootIcon = new ImageView(
+    //     new Image("folder.jpeg")
+    // );
 
-    TreeItem<String> rootItem = new TreeItem<String> ("Folder", rootIcon);
-    rootItem.setExpanded(true);
-    for (int i = 1; i < 6; i++) {
-        TreeItem<String> item = new TreeItem<String> ("File" + i);
-        rootItem.getChildren().add(item);
-    }
-    TreeView<String> tree = new TreeView<String> (rootItem);
-    tree.setPrefWidth(150);
+    // TreeItem<String> rootItem = new TreeItem<String> ("Folder", rootIcon);
+    // rootItem.setExpanded(true);
+    // for (int i = 1; i < 6; i++) {
+    //     TreeItem<String> item = new TreeItem<String> ("File" + i);
+    //     rootItem.getChildren().add(item);
+    // }
+    // TreeView<String> tree = new TreeView<String> (rootItem);
+    // tree.setPrefWidth(150);
 
     Button submit = new Button("Compile");
     submit.addEventHandler(MouseEvent.MOUSE_CLICKED,
