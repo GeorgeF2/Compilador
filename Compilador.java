@@ -19,6 +19,10 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.io.*;
 import java.util.*;
+import java.util.EventObject;
+import java.lang.Object;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 
 public class Compilador extends Application{
 
@@ -68,11 +72,37 @@ BorderPane bp = new BorderPane();
 
       TreeItem<String> rootItem = new TreeItem<String> (file.getParentFile().getName(), new ImageView(new Image("folder.jpeg")));
       rootItem.setExpanded(true);
-      for (int i = 1; i < 6; i++) {
-          TreeItem<String> item = new TreeItem<String> ("File" + i);
+      for (File subFile : file.getParentFile().listFiles()) {
+
+        if (subFile.isFile()) {
+          TreeItem<String> item = new TreeItem<String> (subFile.getName(), new ImageView(new Image("file.png")));
           rootItem.getChildren().add(item);
+        }
+
       }
       tree = new TreeView<String> (rootItem);
+
+      tree.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        @Override
+        public void handle(MouseEvent mouseEvent){
+          if(mouseEvent.getClickCount() == 2){
+            TreeItem<String> item = tree.getSelectionModel().getSelectedItem();
+            File file = new File(item.getValue());
+            try {
+              String data = new String();
+              Scanner scanner = new Scanner(file);
+              while(scanner.hasNextLine()) {
+                data += scanner.nextLine();
+                data += "\n";
+              }
+              inputArea.setText(data.toString());
+            } catch (FileNotFoundException e1) {
+              e1.printStackTrace();
+            }
+            System.out.println("Selected Text : " + item.getValue());
+          }
+        }
+      });
       bp.setLeft(tree);
     });
 
@@ -88,19 +118,6 @@ BorderPane bp = new BorderPane();
 
     inputArea.setStyle("-fx-control-inner-background: darkgray; -fx-font-family: Menlo; -fx-text-fill: white;");
     inputArea.setPadding(new Insets(5, 5, 5, 5));
-
-    // final Node rootIcon = new ImageView(
-    //     new Image("folder.jpeg")
-    // );
-
-    // TreeItem<String> rootItem = new TreeItem<String> ("Folder", rootIcon);
-    // rootItem.setExpanded(true);
-    // for (int i = 1; i < 6; i++) {
-    //     TreeItem<String> item = new TreeItem<String> ("File" + i);
-    //     rootItem.getChildren().add(item);
-    // }
-    // TreeView<String> tree = new TreeView<String> (rootItem);
-    // tree.setPrefWidth(150);
 
     Button submit = new Button("Compile");
     submit.addEventHandler(MouseEvent.MOUSE_CLICKED,
