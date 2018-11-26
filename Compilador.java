@@ -1,0 +1,119 @@
+import javafx.application.Application;
+import java.net.URL;
+import javafx.geometry.*;
+import javafx.stage.*;
+import javafx.scene.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.control.*;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+
+public class Compilador extends Application{
+
+TextArea inputArea = new TextArea();
+
+  @Override
+  public void start(Stage stage){
+
+    MenuBar mBar = new MenuBar();
+    Menu smFile = new Menu("File");
+    Menu smEdit = new Menu("Edit");
+    Menu smWindow = new Menu("Window");
+    Menu smHelp = new Menu("Help");
+
+    MenuItem miOpen = new MenuItem("Open");
+    MenuItem miSave = new MenuItem("Save");
+    MenuItem miUndo = new MenuItem("Undo");
+    MenuItem miRedo = new MenuItem("Redo");
+    MenuItem miCut = new MenuItem("Cut");
+    MenuItem miCopy = new MenuItem("Copy");
+    MenuItem miPaste = new MenuItem("Paste");
+    MenuItem miClear = new MenuItem("Clear");
+    MenuItem miMinimize = new MenuItem("Minimize");
+    MenuItem miClose = new MenuItem("Close");
+    MenuItem miTerms = new MenuItem("Terms of Use");
+    MenuItem miReport = new MenuItem("Report Issue");
+    MenuItem miWelcome = new MenuItem("Welcome Guide");
+
+    miOpen.setOnAction(e -> {
+      FileChooser fileChooser = new FileChooser();
+      File file = fileChooser.showOpenDialog(stage);
+      try {
+        String data = new String();
+        Scanner scanner = new Scanner(file);
+        while(scanner.hasNextLine()) {
+          data += scanner.nextLine();
+          data += "\n";
+        }
+        inputArea.setText(data.toString());
+      } catch (FileNotFoundException e1) {
+        e1.printStackTrace();
+      }
+    });
+
+    smFile.getItems().addAll( miOpen, miSave);
+    smEdit.getItems().addAll(miUndo, miRedo, miCut, miCopy, miPaste, miClear);
+    smWindow.getItems().addAll(miMinimize, miClose);
+    smHelp.getItems().addAll(miTerms, miReport, miWelcome);
+    mBar.getMenus().addAll(smFile, smEdit, smWindow, smHelp);
+    //VBox alls = new VBox(mBar);
+
+    BorderPane bp = new BorderPane();
+
+    inputArea.setStyle("-fx-control-inner-background: darkgray; -fx-font-family: Menlo; -fx-text-fill: white;");
+    inputArea.setPadding(new Insets(5, 5, 5, 5));
+
+    final Node rootIcon = new ImageView(
+        new Image("folder.jpeg")
+    );
+
+    TreeItem<String> rootItem = new TreeItem<String> ("Folder", rootIcon);
+    rootItem.setExpanded(true);
+    for (int i = 1; i < 6; i++) {
+        TreeItem<String> item = new TreeItem<String> ("File" + i);
+        rootItem.getChildren().add(item);
+    }
+    TreeView<String> tree = new TreeView<String> (rootItem);
+    tree.setPrefWidth(150);
+
+    Button submit = new Button("Compile");
+    HBox buttons = new HBox();
+    buttons.setPadding(new Insets(5, 5, 5, 5));
+    buttons.setAlignment(Pos.CENTER_RIGHT);
+    buttons.getChildren().addAll(submit);
+
+    VBox bottom = new VBox();
+    TextArea runTerminal = new TextArea();
+    runTerminal.setEditable(false);
+    runTerminal.setStyle("-fx-control-inner-background: black; -fx-font-family: Consolas; -fx-text-fill: white;");
+    bottom.setPadding(new Insets(5, 5, 5, 5));
+    bottom.getChildren().addAll(runTerminal, buttons);
+
+    bp.setTop(mBar);
+    bp.setLeft(tree);
+    bp.setCenter(inputArea);
+    bp.setBottom(bottom);
+
+    //alls.getChildren().addAll(bp);
+
+
+    Scene scene = new Scene(bp, 1000, 600);
+    stage.setTitle("Compilador Intel Hex 80");
+    stage.setScene(scene);
+    stage.show();
+
+  }
+
+  public static void main(String[] args) {
+      launch(args);
+  }
+}
