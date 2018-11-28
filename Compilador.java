@@ -66,6 +66,7 @@ BorderPane bp = new BorderPane();
           data += "\n";
         }
         inputArea.setText(data.toString());
+        scanner.close();
       } catch (FileNotFoundException e1) {
         e1.printStackTrace();
       }
@@ -96,6 +97,7 @@ BorderPane bp = new BorderPane();
                 data += "\n";
               }
               inputArea.setText(data.toString());
+              scanner.close();
             } catch (FileNotFoundException e1) {
               e1.printStackTrace();
             }
@@ -151,11 +153,29 @@ BorderPane bp = new BorderPane();
   private void compileCode(){
     System.out.println(inputArea.getText());
 
-    String output; // = ":BC010000DDDDDDDDDDDDDDDDCS"
+    String output = ""; // = ":BC010000DDDDDDDDDDDDDDDDCS"
     output.concat(":");
 
     for (String line : inputArea.getText().split("\n")){
-      String[] instructions = line.split(" " || ", ");
+      String[] instructions = line.split(" ");
+      String data = "";
+      switch (instructions[0].toLowerCase()) {
+        case "nop":
+          data.concat("00");
+          break;
+        case "inc":
+          switch (instructions[1].toLowerCase()) {
+            case "a":
+              data.concat("04");
+              break;
+            case "@r0":
+              data.concat("06");
+              break;
+          }
+          break;
+        default:
+          break;
+      }
     }
   }
 
