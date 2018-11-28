@@ -66,6 +66,7 @@ BorderPane bp = new BorderPane();
           data += "\n";
         }
         inputArea.setText(data.toString());
+        scanner.close();
       } catch (FileNotFoundException e1) {
         e1.printStackTrace();
       }
@@ -96,6 +97,7 @@ BorderPane bp = new BorderPane();
                 data += "\n";
               }
               inputArea.setText(data.toString());
+              scanner.close();
             } catch (FileNotFoundException e1) {
               e1.printStackTrace();
             }
@@ -121,7 +123,7 @@ BorderPane bp = new BorderPane();
 
     Button submit = new Button("Compile");
     submit.addEventHandler(MouseEvent.MOUSE_CLICKED,
-        (event) -> runTerminal.setText(inputArea.getText()));
+        (event) -> compileCode());
     HBox buttons = new HBox();
     buttons.setPadding(new Insets(5, 5, 5, 5));
     buttons.setAlignment(Pos.CENTER_RIGHT);
@@ -146,6 +148,35 @@ BorderPane bp = new BorderPane();
     stage.setScene(scene);
     stage.show();
 
+  }
+
+  private void compileCode(){
+    System.out.println(inputArea.getText());
+
+    String output = ""; // = ":BC010000DDDDDDDDDDDDDDDDCS"
+    output.concat(":");
+
+    for (String line : inputArea.getText().split("\n")){
+      String[] instructions = line.split(" ");
+      String data = "";
+      switch (instructions[0].toLowerCase()) {
+        case "nop":
+          data.concat("00");
+          break;
+        case "inc":
+          switch (instructions[1].toLowerCase()) {
+            case "a":
+              data.concat("04");
+              break;
+            case "@r0":
+              data.concat("06");
+              break;
+          }
+          break;
+        default:
+          break;
+      }
+    }
   }
 
   public static void main(String[] args) {
