@@ -198,12 +198,13 @@ private void compileCode(){
 			break;
 
 		default:
+            subCount = 0;
 			break;
 		}
         count += subCount;
         if (count >= 16) { // = ":BCAAAADTDDDDDDDDDDDDDDDDCS" BC=Bit Count, A=Address, DT=Data Type, D=Data, CS=Check Sum
             output = output + (Integer.toString(count, 16).toUpperCase() + adr + "00" + data.substring(1).toUpperCase());
-            output = output + ("CS\n:");
+            output = output + (validateChecksum(Integer.toString(count, 16).toUpperCase() + adr + "00" + data.substring(1).toUpperCase()) + "\n:");
             count = 0;
             adr = addAdr(adr, count);
             data = ":";
@@ -224,6 +225,21 @@ public static String binaryToHex(String s){
 	int decimal = Integer.parseInt(s,2);
 	String hexStr = Integer.toString(decimal,16);
     return hexStr;
+}
+
+private String validateChecksum(String code){
+   	 String temp;
+   	 int sum=0;
+   	 int i;
+   	 for (i=1;i<code.length()-2;i+=2){
+   		 temp = code.substring(i, i+2);
+   		 sum += Integer.parseInt(temp, 16);
+   		 if(sum > 255)
+       		 sum = sum & 0xff;
+   	 }
+   	 sum = ~sum & 0xff;
+   	 sum++;
+   	 return Integer.toString(sum, 16);
 }
 
 public static String hexStringToByteArray(String s) {
