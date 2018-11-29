@@ -31,14 +31,12 @@ TextArea runTerminal = new TextArea();
 TreeView<String> tree = new TreeView<String>();
 BorderPane bp = new BorderPane();
 
-
   @Override
   public void start(Stage stage){
 
     MenuBar mBar = new MenuBar();
     Menu smFile = new Menu("File");
     Menu smEdit = new Menu("Edit");
-    Menu smWindow = new Menu("Window");
     Menu smHelp = new Menu("Help");
 
     MenuItem miOpen = new MenuItem("Open");
@@ -49,8 +47,6 @@ BorderPane bp = new BorderPane();
     MenuItem miCopy = new MenuItem("Copy");
     MenuItem miPaste = new MenuItem("Paste");
     MenuItem miClear = new MenuItem("Clear");
-    MenuItem miMinimize = new MenuItem("Minimize");
-    MenuItem miClose = new MenuItem("Close");
     MenuItem miTerms = new MenuItem("Terms of Use");
     MenuItem miReport = new MenuItem("Report Issue");
     MenuItem miWelcome = new MenuItem("Welcome Guide");
@@ -111,9 +107,8 @@ BorderPane bp = new BorderPane();
 
     smFile.getItems().addAll( miOpen, miSave);
     smEdit.getItems().addAll(miUndo, miRedo, miCut, miCopy, miPaste, miClear);
-    smWindow.getItems().addAll(miMinimize, miClose);
     smHelp.getItems().addAll(miTerms, miReport, miWelcome);
-    mBar.getMenus().addAll(smFile, smEdit, smWindow, smHelp);
+    mBar.getMenus().addAll(smFile, smEdit, smHelp);
     //VBox alls = new VBox(mBar);
 
 
